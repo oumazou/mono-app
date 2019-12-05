@@ -4,6 +4,7 @@
 #include<QDate>
 #include <QSqlQuery>
 #include<QTableView>
+#include<QString>
 reclamations::reclamations()
 {
 num=0;
@@ -12,9 +13,11 @@ ref=00;
 
 cin=000;
 
+type="--";
+
 
 }
-reclamations::reclamations(int num,QDate d,int ref,int cin)
+reclamations::reclamations(int num,QDate d,int ref,int cin,QString type)
 {
   this->num=num;
     this->d=d;
@@ -22,6 +25,7 @@ reclamations::reclamations(int num,QDate d,int ref,int cin)
   this->ref=ref;
 
    this->cin=cin;
+    this->type=type;
 
 }
 
@@ -33,12 +37,13 @@ QString N=QString::number(num);
 QString R=QString::number(ref);
 QString C=QString::number(cin);
 
-query.prepare("INSERT INTO recl (NUM,D,REF,CIN) "
-                    "VALUES (:num, :d, :ref, :cin)");
+query.prepare("INSERT INTO recl (NUM,D,REF,CIN,TYPE) "
+                    "VALUES (:num, :d, :ref, :cin, :type)");
 query.bindValue(":num",N);
 query.bindValue(":d",d);
 query.bindValue(":ref",R);
 query.bindValue(":cin", C);
+query.bindValue(":type", type);
 
 
 
@@ -54,7 +59,7 @@ model->setHeaderData(0, Qt::Horizontal, QObject::tr("num"));
 model->setHeaderData(1, Qt::Horizontal, QObject::tr("d"));
 model->setHeaderData(2, Qt::Horizontal, QObject::tr("ref"));
 model->setHeaderData(3, Qt::Horizontal, QObject::tr("cin"));
-
+model->setHeaderData(4, Qt::Horizontal, QObject::tr("type"));
 
     return model;
 }
@@ -75,17 +80,18 @@ bool reclamations::reche(int num){
     return query.exec();
 }
 
-bool reclamations::modifier(int num,QDate d,int ref,int cin)
+bool reclamations::modifier(int num,QDate d,int ref,int cin,QString type)
 {
     QSqlQuery query;
     QString res=QString::number(num);
     QString res1=QString::number(ref);
     QString res2=QString::number(cin);
-    query.prepare("update recl set d=:d ,ref=:ref ,cin=:cin  where num = :num");
+    query.prepare("update recl set d=:d ,ref=:ref ,cin=:cin ,type=:type  where num = :num");
     query.bindValue(":num", res);
     query.bindValue(":d", d);
     query.bindValue(":ref", res1);
     query.bindValue(":cin", res2);
+    query.bindValue(":type", type);
 
     return query.exec();
 }
@@ -99,6 +105,21 @@ QSqlQueryModel * reclamations::trierReclamation()
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("d"));
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("ref"));
     model->setHeaderData(3, Qt::Horizontal, QObject::tr("cin"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("type"));
+
+        return model;
+}
+
+QSqlQueryModel * reclamations::trierReclamation2()
+{
+    QSqlQueryModel * model= new QSqlQueryModel();
+
+    model->setQuery("select * from recl ORDER BY d");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("num"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("d"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("ref"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("cin"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("type"));
 
         return model;
 }
@@ -122,3 +143,22 @@ void reclamations::searchRegexp(QTableView *table, int x){
    table->show();
 
 }
+
+int reclamations :: nombreReclamation()
+{
+    QSqlQuery query;
+    query.prepare("select COUNT(*) from recl");
+    query.exec();
+    query.next();
+    return query.value(0).toInt();
+}
+
+/*int reclamations :: nombrehomme()
+{
+    QSqlQuery query;
+    query.prepare("select COUNT(*) from recl where sexe='homme'");
+    query.exec();
+    query.next();
+    return query.value(0).toInt();
+
+}*/

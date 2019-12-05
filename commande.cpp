@@ -5,6 +5,7 @@
 #include <QVariant>
 #include<QDate>
 #include<QTableView>
+#include<QString>
 commande::commande()
 {
 num=0;
@@ -49,9 +50,10 @@ model->setHeaderData(2, Qt::Horizontal, QObject::tr("montant"));
 bool commande::supprimer(int numc)
 {
 QSqlQuery query;
-
 query.prepare("Delete from comm where NUM = :num ");
 query.bindValue(":num", numc);
+
+
 return    query.exec();
 }
 
@@ -88,6 +90,16 @@ QSqlQueryModel * commande::triercommande()
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("montant"));
         return model;
 }
+QSqlQueryModel * commande::triercommande2()
+{
+    QSqlQueryModel * model= new QSqlQueryModel();
+
+    model->setQuery("select * from comm ORDER BY montant");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("num"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("dates"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("montant"));
+        return model;
+}
 void commande::clearTable(QTableView *table){
     QSqlQueryModel *model=new QSqlQueryModel();
     model->clear();
@@ -107,3 +119,101 @@ void commande::searchRegexp(QTableView *table, int x){
    table->setModel(model);
    table->show();
 }
+void commande::searchRegexp2(QTableView *table, int x){
+   QSqlQueryModel *model=new QSqlQueryModel();
+   QSqlQuery *query =new QSqlQuery;
+   query->prepare("select * from affectation where regexp_like(num,:num);");
+   query->bindValue(":num",x);
+
+   if(x==0){qDebug("tawa 0");
+
+   query->prepare("select * from affectation;");   }
+   query->exec();
+   model->setQuery(*query);
+   table->setModel(model);
+   table->show();
+}
+QSqlQueryModel * commande::afficherArticles()
+{   QSqlQueryModel * model= new QSqlQueryModel(); //tekhou el view mel table ou takra menha
+
+    model->setQuery("select ref,type,marque,prix,num from comm JOIN arti ON comm.num=arti.num");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ref"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("type"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("marque"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("prix"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("num"));
+
+        return model;
+
+}
+
+int commande:: montantHaut()
+{
+    QSqlQuery query;
+    query.prepare("SELECT MAX(montant) FROM comm");
+    query.exec();
+    query.next();
+       return query.value(0).toInt();
+
+}
+
+int commande:: montantBas()
+{
+    QSqlQuery query;
+    query.prepare("SELECT MIN(montant) FROM comm");
+    query.exec();
+    query.next();
+       return query.value(0).toInt();
+
+}
+int commande :: nombrecommande()
+{
+    QSqlQuery query;
+    query.prepare("select COUNT(*) from comm");
+    query.exec();
+    query.next();
+    return query.value(0).toInt();
+}
+
+QSqlQueryModel *commande :: affecter (int num, int ref)
+{
+
+
+    QSqlQuery query;
+    QString res=QString::number(num);
+    QString res1=QString::number(ref);
+    query.prepare("INSERT INTO affectation(num, ref) "
+                  "VALUES (:num, :ref)");
+    query.bindValue(":num",res);
+    query.bindValue(":ref",res1);
+    query.exec();
+    QSqlQueryModel * model= new QSqlQueryModel();
+    model->setQuery("Select * from affectation");
+    model->setHeaderData(0, Qt::Horizontal,QObject::tr("num"));
+    model->setHeaderData(1, Qt::Horizontal,QObject::tr("ref"));
+    return model;
+
+
+
+}
+bool commande :: supprimerAffect(int num)
+{
+    QSqlQuery query;
+
+
+    query.prepare("DELETE FROM affectation WHERE num=:num ");
+    query.bindValue(":num",num);
+
+   return    query.exec();
+}
+QSqlQueryModel * commande :: afficherAffectation()
+{
+    QSqlQueryModel * model= new QSqlQueryModel();
+    model->setQuery("Select * from affectation where num:=num");
+    model->setHeaderData(0, Qt::Horizontal,QObject::tr("num"));
+    model->setHeaderData(1, Qt::Horizontal,QObject::tr("ref"));
+    return model;
+
+}
+
+

@@ -96,6 +96,50 @@ private slots:
 
     void on_lineEdit_7_textChanged(const QString &arg1);
 
+    void on_pushButton_5_clicked();
+
+    void on_pushButton_6_clicked();
+
+    void on_pushButton_7_clicked();
+
+    void on_pushButton_9_clicked();
+
+    void on_pushButton_10_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void on_ajoutReclamations_8_clicked();
+
+    void on_liste_reclamation_activated(const QModelIndex &index);
+
+    void on_modiferReclamations_clicked();
+
+    void on_statistique_clicked();
+
+    void on_annulerC_clicked();
+
+    void on_annulerC2_clicked();
+
+    void on_ajoutReclamations_7_clicked();
+
+    void on_annulerA_clicked();
+
+    void on_annulerR_clicked();
+
+    void on_annulerR2_clicked();
+
+    void on_stat_clicked();
+
+    void on_trierCommande_2_clicked();
+
+    void on_trierReclamations_2_clicked();
+
+    void on_statis_clicked();
+
+    void on_affecterarticle_clicked();
+
+    void on_statis2_clicked();
+
 private:
     Ui::choose *ui;
     commande tmpcommande;

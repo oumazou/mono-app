@@ -4,41 +4,32 @@
 #include <QObject>
 #include <QSqlQueryModel>
 #include <QWidget>
-#include "connection.h"
-#include <QDate>
-#include <QTableView>
+#include<QTableView>
+
 
 class Articles
 {
-    QString ref;
-    QString prix;
+    int ref;
     QString type;
-    int quant;
-    QDate d;
     QString marque;
+    double prix;
 
-public:
-    Articles();
-    Articles (QString ref,QString prix,QString type, int quant, QDate d, QString marque);
-    bool ajouter();
-    QSqlQueryModel * afficher();
-    bool supprimer(QString ref);
-    bool  modifier(QString ref, QString prix, QString type, int quant, QDate d, QString marque);
-    void setRef(QString Ref) {this->ref=Ref;}
-    void clearTable(QTableView*);
-    void searchRegexp(QTableView*,QString);
-    bool  recherche(QString);
-    QSqlQueryModel *  trierarticles();
-    QSqlQueryModel *  trierprix();
-    QString nombreArticle();
-    QString prixHaut();
-    QString prixBas();
-    QString* listeType();
-    int nombreCategorie1();
-    int nombreCategorie2();
-    int nombreCategorie3();
 
-    QString nombre(QString typ);
-    ~Articles(){}
+
+    public:
+        Articles();
+        Articles (int ref,QString type,QString marque,double prix);
+         bool ajouter();
+         QSqlQueryModel * afficher();
+         QSqlQueryModel * afficherRef();
+         void  supprimer(int ref);
+         bool  modifier();
+         void setRef(int ref) {this->ref=ref;}
+         bool  rechA();
+         QSqlQueryModel * afficherarticlechercher(int);
+         void clearTable(QTableView*);
+            void searchRegexp(QTableView*,int);
+            int nombreArticles();
+        ~Articles(){}
 };
 #endif // ARTICLES_H

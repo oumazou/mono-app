@@ -31,7 +31,7 @@ bool clients :: ajouter()
          query.bindValue(":cin",res);
          query.bindValue(":nom", nom);
          query.bindValue(":prenom",prenom);
-         query.bindValue(":sexe", sexe);
+         query.bindValue(":sexe",sexe);
          query.bindValue(":tel",res1);
 
          return query.exec();
@@ -148,6 +148,7 @@ void clients::searchRegexp(QTableView *table, int x){
 
    if(x==0){qDebug("tawa 0");
 
+
    query->prepare("select * from clients;");   }
    query->exec();
    model->setQuery(*query);
@@ -155,3 +156,4 @@ void clients::searchRegexp(QTableView *table, int x){
    table->show();
 
 }
+

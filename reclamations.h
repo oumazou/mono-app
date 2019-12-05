@@ -8,19 +8,22 @@
 class reclamations
 {public:
     reclamations();
-    reclamations(int,QDate,int,int);
+    reclamations(int,QDate,int,int,QString);
    int get_num()
     {return num;}
     bool ajouter();
     QSqlQueryModel * afficher();
     bool supprimer(int);
     bool reche(int);
-    bool modifier(int,QDate,int,int);
+    bool modifier(int,QDate,int,int,QString);
     void setNum(int num)
     {this->num=num;}
     QSqlQueryModel * trierReclamation();
+    QSqlQueryModel * trierReclamation2();
     void clearTable(QTableView*);
        void searchRegexp(QTableView*,int);
+       int nombreReclamation();
+       int nombrehomme();
     ~reclamations(){}
 private:
 
@@ -28,7 +31,7 @@ private:
     QDate d;
     int ref;
     int cin;
-
+    QString type;
 
 
 };
