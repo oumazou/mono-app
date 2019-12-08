@@ -8,17 +8,17 @@
 class Client
 {
 private:
-    int ID;
+    int cin;
     QString Nom;
     QString Prenom;
     QString Sexe;
     QString Adresse;
-    int Etat;
-    QString Num;
+    //int Etat;
+    QString tel;
 
 public:
     Client();
-    Client(int,QString,QString,QString,QString,int,QString);
+    Client(int,QString,QString,QString,QString,QString);
 
     int getID();
     void setID(int);
@@ -31,12 +31,12 @@ public:
     QString getAdresse();
     void setAdresse(QString);
     int getEtat();
-    void setEtat(int);
+    /*void setEtat(int);*/
     QString getNum();
     void setNum(QString);
 
     QSqlQueryModel *Afficher();
-    QSqlQueryModel *Afficher_ID();
+    QSqlQueryModel *AfficherCin();
     QSqlQueryModel *recheche(QString);
     bool Ajouter();
     bool Supprimer();

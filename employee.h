@@ -25,7 +25,6 @@ public:
     void clearTable(QTableView*);
     void searchRegexp(QTableView*,int);
     QSqlQueryModel * trier();
-
 private:
     QString nom,prenom,adresse;
     int id,num,cnss;

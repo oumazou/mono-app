@@ -8,14 +8,14 @@
 class reclamations
 {public:
     reclamations();
-    reclamations(int,QDate,int,int,QString);
+    reclamations(int,QDate,QString,int,QString);
    int get_num()
     {return num;}
     bool ajouter();
     QSqlQueryModel * afficher();
     bool supprimer(int);
     bool reche(int);
-    bool modifier(int,QDate,int,int,QString);
+    bool modifier(int,QDate,QString,int,QString);
     void setNum(int num)
     {this->num=num;}
     QSqlQueryModel * trierReclamation();
@@ -29,10 +29,11 @@ private:
 
     int num;
     QDate d;
-    int ref;
+    QString ref;
     int cin;
     QString type;
 
 
 };
 #endif // RECLAMATIONS_H
+

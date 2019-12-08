@@ -161,7 +161,7 @@ void Promotions :: affecter (QString num, QString ref)
     int pourcentage ;
     QSqlQuery query3;
     query3.prepare("SELECT pourcentage FROM promotions where num = :num");
-    query.bindValue(":num",num);
+    query3.bindValue(":num",num);
     query3.exec();
     while(query.next()){
         pourcentage = query3.value(0).toInt();

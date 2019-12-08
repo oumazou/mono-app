@@ -14,6 +14,7 @@ class commande
     bool ajouter();
     QSqlQueryModel * afficher();
     QSqlQueryModel * afficherArticles();
+    QSqlQueryModel * afficherNum();
     bool supprimer(int);
     bool rech(int);
     bool modifier(int,QDate,double);
@@ -30,12 +31,12 @@ class commande
     int montantHaut();
     int montantBas();
     int nombrecommande();
-    void clearTable(QTableView*);
-    QSqlQueryModel * affecter(int,int);
+    void clearTable(QTableView*); /**/
+    QSqlQueryModel * affecter(int,QString); /**/
     bool supprimerAffect(int);
     QSqlQueryModel * afficherAffectation();
-       void searchRegexp(QTableView*,int);
-        void searchRegexp2(QTableView*,int);
+       void searchRegexp(QTableView*,int); /**/
+        void searchRegexp2(QTableView*,int); /**/
     ~commande(){}
 
 private:

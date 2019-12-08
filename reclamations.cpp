@@ -9,7 +9,7 @@ reclamations::reclamations()
 {
 num=0;
 
-ref=00;
+ref="-";
 
 cin=000;
 
@@ -17,7 +17,7 @@ type="--";
 
 
 }
-reclamations::reclamations(int num,QDate d,int ref,int cin,QString type)
+reclamations::reclamations(int num,QDate d,QString ref,int cin,QString type)
 {
   this->num=num;
     this->d=d;
@@ -34,14 +34,14 @@ bool reclamations::ajouter()
 {
 QSqlQuery query;
 QString N=QString::number(num);
-QString R=QString::number(ref);
+
 QString C=QString::number(cin);
 
 query.prepare("INSERT INTO recl (NUM,D,REF,CIN,TYPE) "
                     "VALUES (:num, :d, :ref, :cin, :type)");
 query.bindValue(":num",N);
 query.bindValue(":d",d);
-query.bindValue(":ref",R);
+query.bindValue(":ref",ref);
 query.bindValue(":cin", C);
 query.bindValue(":type", type);
 
@@ -80,16 +80,16 @@ bool reclamations::reche(int num){
     return query.exec();
 }
 
-bool reclamations::modifier(int num,QDate d,int ref,int cin,QString type)
+bool reclamations::modifier(int num,QDate d,QString ref,int cin,QString type)
 {
     QSqlQuery query;
     QString res=QString::number(num);
-    QString res1=QString::number(ref);
+
     QString res2=QString::number(cin);
     query.prepare("update recl set d=:d ,ref=:ref ,cin=:cin ,type=:type  where num = :num");
     query.bindValue(":num", res);
     query.bindValue(":d", d);
-    query.bindValue(":ref", res1);
+    query.bindValue(":ref", ref);
     query.bindValue(":cin", res2);
     query.bindValue(":type", type);
 

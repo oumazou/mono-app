@@ -4,13 +4,12 @@
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 #include <QTableView>
-
+#include <QDate>
 class Conge
 {
 public:
     Conge();
-    Conge(int,QString,QString,int);
-    Conge(QString,QString,int);
+    Conge(int,QDate,QDate,int);
     QString get_debutconge();
     QString get_finconge();
     int get_num();
@@ -20,14 +19,15 @@ public:
     bool supprimer(int);
     QSqlQueryModel * afficher();
     bool recherche(int);
-    bool modifier(QString,QString,int);
+    bool modifier(int numero,QDate debutconge,QDate finconge,int idemp);
 
     void clearTable(QTableView*);
     void searchRegexp(QTableView*,int);
-
+QSqlQueryModel *  trierConge();
 private:
-    QString debutconge,finconge;
-    int num,iduser;
+    QDate debutconge;
+    QDate finconge;
+    int num,idemp;
 };
 
 #endif // CONGE_H

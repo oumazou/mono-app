@@ -122,18 +122,18 @@ void commande::searchRegexp(QTableView *table, int x){
 void commande::searchRegexp2(QTableView *table, int x){
    QSqlQueryModel *model=new QSqlQueryModel();
    QSqlQuery *query =new QSqlQuery;
-   query->prepare("select * from affectation where regexp_like(num,:num);");
+   query->prepare("select * from affect where regexp_like(num,:num);");
    query->bindValue(":num",x);
 
    if(x==0){qDebug("tawa 0");
 
-   query->prepare("select * from affectation;");   }
+   query->prepare("select * from affect;");   }
    query->exec();
    model->setQuery(*query);
    table->setModel(model);
    table->show();
 }
-QSqlQueryModel * commande::afficherArticles()
+/*QSqlQueryModel * commande::afficherArticles()
 {   QSqlQueryModel * model= new QSqlQueryModel(); //tekhou el view mel table ou takra menha
 
     model->setQuery("select ref,type,marque,prix,num from comm JOIN arti ON comm.num=arti.num");
@@ -141,11 +141,11 @@ QSqlQueryModel * commande::afficherArticles()
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("type"));
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("marque"));
     model->setHeaderData(3, Qt::Horizontal, QObject::tr("prix"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("num"));
+
 
         return model;
 
-}
+}*/
 
 int commande:: montantHaut()
 {
@@ -175,20 +175,20 @@ int commande :: nombrecommande()
     return query.value(0).toInt();
 }
 
-QSqlQueryModel *commande :: affecter (int num, int ref)
+QSqlQueryModel *commande :: affecter (int num, QString ref)
 {
 
 
     QSqlQuery query;
     QString res=QString::number(num);
-    QString res1=QString::number(ref);
-    query.prepare("INSERT INTO affectation(num, ref) "
+
+    query.prepare("INSERT INTO affect(num, ref) "
                   "VALUES (:num, :ref)");
     query.bindValue(":num",res);
-    query.bindValue(":ref",res1);
+    query.bindValue(":ref",ref);
     query.exec();
     QSqlQueryModel * model= new QSqlQueryModel();
-    model->setQuery("Select * from affectation");
+    model->setQuery("Select * from affect");
     model->setHeaderData(0, Qt::Horizontal,QObject::tr("num"));
     model->setHeaderData(1, Qt::Horizontal,QObject::tr("ref"));
     return model;
@@ -201,7 +201,7 @@ bool commande :: supprimerAffect(int num)
     QSqlQuery query;
 
 
-    query.prepare("DELETE FROM affectation WHERE num=:num ");
+    query.prepare("DELETE FROM affect WHERE num=:num ");
     query.bindValue(":num",num);
 
    return    query.exec();
@@ -209,11 +209,19 @@ bool commande :: supprimerAffect(int num)
 QSqlQueryModel * commande :: afficherAffectation()
 {
     QSqlQueryModel * model= new QSqlQueryModel();
-    model->setQuery("Select * from affectation where num:=num");
+    model->setQuery("Select * from affect where num:=num");
     model->setHeaderData(0, Qt::Horizontal,QObject::tr("num"));
     model->setHeaderData(1, Qt::Horizontal,QObject::tr("ref"));
     return model;
 
 }
 
+QSqlQueryModel * commande :: afficherNum()
+{
+    QSqlQueryModel * model= new QSqlQueryModel();
+    model->setQuery("Select num from comm");
+    model->setHeaderData(0, Qt::Horizontal,QObject::tr("num"));
+
+    return model;
+}
 
