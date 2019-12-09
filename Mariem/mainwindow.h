@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include"client.h"
 #include "reclamations.h"
+#include "fournisseur.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -300,10 +301,65 @@ private slots:
 
     void on_pb_ajouter_clicked();
 
+    void on_tabfournisseu_activated(const QModelIndex &index);
+
+    void on_suprimmm_7_clicked();
+
+    void on_modifffff_clicked();
+
+    void on_pushButton_ajout_7_clicked();
+
+    void on_four_clicked();
+
+    void on_lineEdit_4_textChanged(const QString &arg1);
+
+    void on_suprimerFournissuer_clicked();
+
+    void on_pushButton_12224_clicked();
+
+    void on_pushButton_155_clicked();
+
+    void on_pushButton_154_clicked();
+
+    void on_ajouuuuuuuut_clicked();
+
+    void on_congeee_3_clicked();
+
+    void on_ekfj_clicked();
+
+    void on_emppp_4_clicked();
+
+    void on_pushButton_159_clicked();
+
+    void on_pushButton_158_clicked();
+
+    void on_pushButton_157_clicked();
+
+    void on_pushButton_156_clicked();
+
+    void on_prommmmmmmm_clicked();
+
+    void on_prommmmmmmm_3_clicked();
+
+    void on_affectprom_clicked();
+    void load3();
+     void load4();
+
+     void on_pushButton_160_clicked();
+
+     void on_pushButton_161_clicked();
+
+     void on_pushButton_162_clicked();
+
+     void on_pushButton_29_clicked();
+
+     void on_pushButton_32_clicked();
+
 private:
     Ui::MainWindow *ui;
     commande tmpcommande;
     Client tmpclient;
     reclamations tmpreclamations;
+    Fournisseur tmpFournisseur;
 };
 #endif // MAINWINDOW_H

@@ -8,6 +8,7 @@
 #include "promotions.h"
 #include <stdio.h>
 #include <QString>
+#include "fournisseur.h"
 #include "commande.h"
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMainWindow>
@@ -29,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent,int type)
     ui->setupUi(this);
     this->load();
     this->load2();
+    this->load3();
+    this->load4();
      ui->comboBox_3->setModel(a.afficherRef());
      ui->comboBox_4->setModel(tmpcommande.afficherNum());
      ui->liste_commande->setModel(tmpcommande.afficher());
@@ -44,6 +47,30 @@ MainWindow::MainWindow(QWidget *parent,int type)
              ui->liste_commande->setShowGrid(false);
               ui->comboBox->setModel(tmpclient.AfficherCin());
               ui->comboBox_2->setModel(a.afficherRef());
+     ui->tabfournisseu->setModel(tmpFournisseur.afficher());
+     Employee e;
+      ui->emp->setModel(e.afficher());
+      ui->emp->verticalHeader()->setVisible(false);
+          ui->emp->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+          ui->emp->setAlternatingRowColors(true);
+          ui->emp->setShowGrid(false);
+          Conge c;
+          ui->tableView_5->setModel(c.afficher());
+          ui->tableView_5->verticalHeader()->setVisible(false);
+              ui->tableView_5->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+              ui->tableView_5->setAlternatingRowColors(true);
+              ui->tableView_5->setShowGrid(false);
+        Promotions p;
+        ui->tableView_3->setModel(p.afficher());
+        ui->tableView_3->verticalHeader()->setVisible(false);
+            ui->tableView_3->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+            ui->tableView_3->setAlternatingRowColors(true);
+            ui->tableView_3->setShowGrid(false);
+         ui->tableView_4->setModel(p.afficherAffectation());
+         ui->tableView_4->verticalHeader()->setVisible(false);
+             ui->tableView_4->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+             ui->tableView_4->setAlternatingRowColors(true);
+             ui->tableView_4->setShowGrid(false);
 
 }
 
@@ -142,7 +169,7 @@ void MainWindow::on_pushButton_2_clicked()
 }
 void MainWindow::on_pushButton_4_clicked()////////////////////////////
 {
-    ui->stackedWidget->setCurrentIndex(4);
+    ui->stackedWidget->setCurrentIndex(11);
 }
 
 void MainWindow::on_pushButton_5_clicked()
@@ -389,7 +416,7 @@ void MainWindow::on_piechart_clicked() //cont
 
 void MainWindow::on_ar_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(1);
+    ui->stackedWidget->setCurrentIndex(12);
 }
 
 void MainWindow::on_sto_clicked()
@@ -901,6 +928,34 @@ void MainWindow :: load2()
     }
 
 }
+void MainWindow :: load3()
+{
+    ui->art->clear();
+    QSqlQuery query;
+    query.prepare("select ref from articles");
+    if(query.exec())
+    { while (query.next())
+        {
+            ui->art->addItem(query.value(0).toString());
+        }
+
+    }
+
+}
+void MainWindow :: load4()
+{
+    ui->promo->clear();
+    QSqlQuery query;
+    query.prepare("select num from promotions");
+    if(query.exec())
+    { while (query.next())
+        {
+            ui->promo->addItem(query.value(0).toString());
+        }
+
+    }
+
+}
 
 void MainWindow::on_emppp_clicked()
 {
@@ -910,7 +965,7 @@ void MainWindow::on_emppp_clicked()
 
 void MainWindow::on_congeee_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(16);
+    ui->stackedWidget->setCurrentIndex(17);
     this->load();
 }
 
@@ -1987,7 +2042,7 @@ void MainWindow::on_suprimerReclamations_clicked()
                     QObject::tr("Erreur !.\n"
                                 "Click Cancel to exit."), QMessageBox::Cancel);
 }
-
+/*********************************************hichri*********************************************************/
 void MainWindow::on_pushButton_12222_clicked()
 {
     reclamations r;
@@ -2023,4 +2078,261 @@ void MainWindow::on_pushButton_12222_clicked()
 void MainWindow::on_pb_ajouter_clicked()
 {
 
+    if(ui->lineEdit_num_2->text().isEmpty() || ui->lineEdit_nom_2->text().isEmpty() || ui->lineEdit_mail->text().isEmpty())
+        { QMessageBox ok;
+            ok.setWindowTitle("Erreur");
+            ok.setText("ajout échouée! ");
+            ok.setStandardButtons(QMessageBox::Ok);
+            ok.exec();
+            return;
+        }
+    bool trrr = false;
+    int rating = ui->spinBox->text().toInt();
+    long num = ui->lineEdit_num_2->text().toLong();
+    QString nom= ui->lineEdit_nom_2->text();
+    QString mail= ui->lineEdit_mail->text();
+
+    for(int i=0;i<mail.size();i++)
+    {
+        if(mail[i] == '@' )
+        {
+            trrr = true;
+        }
+    }
+
+  if(trrr)
+  {
+      Fournisseur e(num,rating,nom,mail);
+      bool test=e.ajouter();
+      if(test)
+    {ui->tabfournisseu->setModel(tmpFournisseur.afficher());//refresh
+    QMessageBox::information(nullptr, QObject::tr("Ajouter un fournisseur"),
+                      QObject::tr("fournisseur ajouté.\n"
+                                  "Click Cancel to exit."), QMessageBox::Cancel);
+
+    }
+      else
+          QMessageBox::critical(nullptr, QObject::tr("Ajouter un fournisseur"),
+                      QObject::tr("Erreur !.\n"
+                                  "Click Cancel to exit."), QMessageBox::Cancel);
+  }
+  else
+      QMessageBox::critical(nullptr, QObject::tr("Ajouter un fournisseur"),
+                  QObject::tr("mail no valide !.\n"
+                              "Click Cancel to exit."), QMessageBox::Cancel);
+}
+
+void MainWindow::on_tabfournisseu_activated(const QModelIndex &index)
+{
+
+    QString val=ui->tabfournisseu->model()->data(index).toString();
+    QSqlQuery qry;
+    qry.prepare("select * from fournisseur where num='"+val+"'");
+
+    if(qry.exec())
+    {
+        while(qry.next())
+        {
+
+
+            ui->nummm->setText(qry.value(0).toString());
+            ui->ratee->setValue(qry.value(1).toInt());
+            ui->nommm->setText(qry.value(2).toString());
+            ui->mailll->setText(qry.value(3).toString());
+
+
+
+        }
+    }
+    else{
+        QMessageBox::critical(nullptr, QObject::tr("Big Error"),
+                              QObject::tr("Erreur !.\n"
+                                          "Click Cancel to exit."), QMessageBox::Cancel);
+    }
+}
+
+void MainWindow::on_suprimmm_7_clicked()
+{
+    if(ui->nummm->text().isEmpty())
+        { QMessageBox ok;
+            ok.setWindowTitle("Erreur");
+            ok.setText("suppresion échouée");
+            ok.setStandardButtons(QMessageBox::Ok);
+            ok.exec();
+            return;
+        }
+
+    int num= ui->nummm->text().toInt();
+    bool test=tmpFournisseur.supprimer(num);
+
+if(test)
+{ui->tabfournisseu->setModel(tmpFournisseur.afficher());//refresh
+    QMessageBox::information(nullptr, QObject::tr("Supprimer une commande"),
+                QObject::tr("commande supprimé.\n"
+                            "Click Cancel to exit."), QMessageBox::Cancel);
+
+}
+else
+    QMessageBox::critical(nullptr, QObject::tr("supprimer une commande"),
+                QObject::tr("Erreur !.\n"
+                            "Click Cancel to exit."), QMessageBox::Cancel);//
+}
+
+void MainWindow::on_modifffff_clicked()
+{
+    if(ui->nummm->text().isEmpty() || ui->nommm->text().isEmpty() || ui->mailll->text().isEmpty())
+        { QMessageBox ok;
+            ok.setWindowTitle("Erreur");
+            ok.setText("modification échouée");
+            ok.setStandardButtons(QMessageBox::Ok);
+            ok.exec();
+            return;
+        }
+
+    int num = ui->nummm->text().toInt();
+    int rating = ui->ratee->text().toInt();
+    QString nom = ui->nommm->text();
+    QString mail = ui->mailll->text();
+    Fournisseur f;
+    if(f.rech(num)){
+        bool test = f.Modifier(num,rating,nom,mail);
+        if(test){
+            ui->tabfournisseu->setModel(tmpFournisseur.afficher());
+            QMessageBox::information(nullptr,QObject::tr("fournisseur modifier"),QObject::tr("click cancel to exit!"),QMessageBox::Cancel);
+        }
+    }
+}
+
+void MainWindow::on_pushButton_ajout_7_clicked()
+{
+   ui->stackedWidget->setCurrentIndex(22);
+}
+
+void MainWindow::on_four_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(21);
+}
+
+void MainWindow::on_lineEdit_4_textChanged(const QString &arg1)
+{
+    Fournisseur f;
+        f.clearTable(ui->tabfournisseu);
+        int mat=ui->lineEdit_4->text().toInt();
+        f.searchRegexp(ui->tabfournisseu,mat);
+}
+
+void MainWindow::on_suprimerFournissuer_clicked()
+{
+
+}
+
+void MainWindow::on_pushButton_12224_clicked()
+{
+    Fournisseur c;
+
+         if(c.trier()){
+
+                 ui->tabfournisseu->setModel(tmpFournisseur.trier());
+                 QMessageBox::information(nullptr, QObject::tr("trier les fournisseurs"),
+                             QObject::tr("fournisseur triées.\n"
+                                         "Voulez-vous enregistrer les modifications ?"),
+                                    QMessageBox::Save
+                                    | QMessageBox::Cancel,
+                                   QMessageBox::Save);
+
+             }
+             else
+                 QMessageBox::critical(nullptr, QObject::tr("trier les fournisseur"),
+                             QObject::tr("Erreur !.\n"
+                                         "Click Cancel to exit."), QMessageBox::Cancel);
+}
+
+void MainWindow::on_pushButton_155_clicked()
+{
+     ui->stackedWidget->setCurrentIndex(18);
+}
+
+void MainWindow::on_pushButton_154_clicked()
+{
+     ui->stackedWidget->setCurrentIndex(18);
+}
+
+void MainWindow::on_ajouuuuuuuut_clicked()
+{
+     ui->stackedWidget->setCurrentIndex(14);
+}
+
+void MainWindow::on_congeee_3_clicked()
+{
+      ui->stackedWidget->setCurrentIndex(16);
+}
+
+void MainWindow::on_ekfj_clicked()
+{
+     ui->stackedWidget->setCurrentIndex(15);
+}
+
+void MainWindow::on_emppp_4_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(17);
+}
+
+void MainWindow::on_pushButton_159_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(18);
+}
+
+void MainWindow::on_pushButton_158_clicked()
+{
+     ui->stackedWidget->setCurrentIndex(18);
+}
+
+void MainWindow::on_pushButton_157_clicked()
+{
+     ui->stackedWidget->setCurrentIndex(18);
+}
+
+void MainWindow::on_pushButton_156_clicked()
+{
+     ui->stackedWidget->setCurrentIndex(18);
+}
+
+void MainWindow::on_prommmmmmmm_clicked()
+{
+     ui->stackedWidget->setCurrentIndex(12);
+}
+
+void MainWindow::on_prommmmmmmm_3_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(12);
+}
+
+void MainWindow::on_affectprom_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(13);
+}
+
+void MainWindow::on_pushButton_160_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(18);
+}
+
+void MainWindow::on_pushButton_161_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(18);
+}
+
+void MainWindow::on_pushButton_162_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(18);
+}
+
+void MainWindow::on_pushButton_29_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(21);
+}
+
+void MainWindow::on_pushButton_32_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(15);
 }

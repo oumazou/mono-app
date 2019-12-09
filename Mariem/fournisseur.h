@@ -3,22 +3,25 @@
 #include <QString>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
+#include <QTableView>
 class Fournisseur
 {public:
     Fournisseur();
-    Fournisseur(long,QString,int,QString);
+    Fournisseur(int,int,QString,QString);
     QString get_nom();
     QString get_mail();
     int get_rating();
-    long get_num();
+    int get_num();
     bool ajouter();
     QSqlQueryModel * afficher();
-    bool supprimer(QString);
-    bool Modifier(long,QString,int,QString);
-    bool rech(QString);
+    bool supprimer(int);
+    bool Modifier(int,int,QString,QString);
+    bool rech(int);
     QSqlQueryModel * trier();
+    void clearTable(QTableView*);
+     void searchRegexp(QTableView*,int);
 private:
-    long num;
+    int num;
     QString nom;
     int rating;
     QString mail;

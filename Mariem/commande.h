@@ -31,11 +31,12 @@ class commande
     int montantHaut();
     int montantBas();
     int nombrecommande();
-    void clearTable(QTableView*); /**/
+    void clearTable(QTableView*);
+     void searchRegexp(QTableView*,int);/**/
     QSqlQueryModel * affecter(int,QString); /**/
     bool supprimerAffect(int);
     QSqlQueryModel * afficherAffectation();
-       void searchRegexp(QTableView*,int); /**/
+       /**/
         void searchRegexp2(QTableView*,int); /**/
     ~commande(){}
 
